@@ -1,11 +1,34 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
+import { provider, auth, googleSignIn } from "../service/firebase";
+
 export default function Login() {
+  const navigate = useNavigate();
+
   return (
     <Content>
       <Title>Responsiview</Title>
-      <SignInButton>
+      <SignInButton
+        onClick={async () => {
+          try {
+            const response = await googleSignIn(auth, provider);
+
+            if (response.data.result === "ok") {
+              navigate("/home", { replace: true });
+            }
+          } catch (error) {
+            navigate("/error", {
+              state: {
+                code: error.code,
+                message: error.message,
+              },
+              replace: true,
+            });
+          }
+        }}
+      >
         <Icon className="fa-brands fa-google" />
         Sign in with Google
       </SignInButton>
