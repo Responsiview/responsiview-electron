@@ -4,6 +4,8 @@ import { createGlobalStyle } from "styled-components";
 
 import Login from "../components/Login";
 import Home from "../components/Home";
+import Error from "../components/Error";
+import NotFound from "../components/NotFound";
 
 export default function App() {
   return (
@@ -12,6 +14,8 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/error" element={<Error />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );
