@@ -22,7 +22,7 @@ export default function Login() {
             navigate("/error", {
               state: {
                 errorStatus: error.response?.status,
-                errorMessage: error.response?.data,
+                errorMessage: error.response?.data.errorMessage,
               },
               replace: true,
             });
