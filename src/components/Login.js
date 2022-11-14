@@ -15,14 +15,14 @@ export default function Login() {
           try {
             const response = await googleSignIn(auth, provider);
 
-            if (response.data.result === "ok") {
+            if (response?.data.result === "ok") {
               navigate("/home", { replace: true });
             }
           } catch (error) {
             navigate("/error", {
               state: {
-                code: error.code,
-                message: error.message,
+                errorStatus: error.response?.status,
+                errorMessage: error.response?.data,
               },
               replace: true,
             });

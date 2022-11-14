@@ -18,17 +18,13 @@ export const provider = new GoogleAuthProvider();
 export const auth = getAuth();
 
 export async function googleSignIn(auth, provider) {
-  try {
-    const result = await signInWithPopup(auth, provider);
-    const response = await axios({
-      method: "post",
-      url: `${process.env.REACT_APP_BASE_SERVER_URL}/login`,
-      data: { userEmail: result.user.email },
-      withCredentials: true,
-    });
+  const result = await signInWithPopup(auth, provider);
+  const response = await axios({
+    method: "post",
+    url: `${process.env.REACT_APP_BASE_SERVER_URL}/login`,
+    data: { userEmail: result.user.email },
+    withCredentials: true,
+  });
 
-    return response;
-  } catch (err) {
-    console.error(err);
-  }
+  return response;
 }
