@@ -20,7 +20,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "electron": "wait-on http://localhost:3000 && nodemon --exec electron ."
+    "electron": "wait-on http://localhost:3000 && electron ."
   },
   "eslintConfig": {
     "extends": [
