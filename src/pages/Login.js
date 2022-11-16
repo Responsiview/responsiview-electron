@@ -4,6 +4,8 @@ import styled from "styled-components";
 
 import { provider, auth, googleSignIn } from "../service/firebase";
 
+import { COLOR } from "../config/constants";
+
 export default function Login() {
   const navigate = useNavigate();
 
@@ -43,28 +45,28 @@ const Content = styled.div`
   align-items: center;
   width: 100vw;
   height: 100vh;
-  background-color: #282828;
+  background-color: ${COLOR.DARK_NAVY};
 `;
 
 const Title = styled.p`
   font-size: 3rem;
-  color: #4036ff;
+  color: ${COLOR.IVORY};
 `;
 
 const SignInButton = styled.button`
   display: flex;
   align-items: center;
-  background-color: #575757;
   margin-top: 3rem;
   padding: 0.5rem 2rem;
   border-radius: 5px;
   font-size: 1rem;
-  color: #ffffff;
-
+  background-color: ${COLOR.DARK_BLUE};
+  color: ${COLOR.IVORY};
   transition: all 300ms;
 
   &:hover {
-    background-color: #6e6e6e;
+    background-color: ${COLOR.IVORY};
+    color: ${COLOR.DARK_BLUE};
   }
 `;
 

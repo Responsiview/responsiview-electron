@@ -2,10 +2,10 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { createGlobalStyle } from "styled-components";
 
-import Login from "../components/Login";
-import Home from "../components/Home";
-import Error from "../components/Error";
-import NotFound from "../components/NotFound";
+import Login from "../pages/Login";
+import Home from "../pages/Home";
+import Error from "../pages/Error";
+import NotFound from "../pages/NotFound";
 
 export default function App() {
   return (
