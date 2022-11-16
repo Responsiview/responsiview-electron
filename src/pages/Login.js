@@ -62,7 +62,6 @@ const SignInButton = styled.button`
   font-size: 1rem;
   background-color: ${COLOR.DARK_BLUE};
   color: ${COLOR.IVORY};
-  transition: all 300ms;
 
   &:hover {
     background-color: ${COLOR.IVORY};

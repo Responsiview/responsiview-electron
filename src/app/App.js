@@ -31,5 +31,6 @@ const Global = createGlobalStyle`
   button{
     cursor: pointer;
     border: none;
+    transition: all 200ms;
   }
 `;
