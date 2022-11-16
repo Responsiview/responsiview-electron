@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
 import Header from "../components/Header";
@@ -8,14 +8,12 @@ import DeviceSection from "../components/DeviceSection";
 import { COLOR } from "../config/constants";
 
 export default function Home() {
-  const [commonUrl, setCommonUrl] = useState("https://www.google.com");
-
   return (
     <>
-      <Header commonUrl={commonUrl} setCommonUrl={setCommonUrl} />
+      <Header />
       <Content>
         <Sidebar />
-        <DeviceSection commonUrl={commonUrl} setCommonUrl={setCommonUrl} />
+        <DeviceSection />
       </Content>
     </>
   );

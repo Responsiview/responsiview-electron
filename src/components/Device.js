@@ -1,40 +1,37 @@
 import React, { useEffect, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import { TfiReload } from "react-icons/tfi";
+import { RiDeleteBin5Fill } from "react-icons/ri";
+
+import { deleteDisplayedDevice } from "../features/device/deviceSlice";
 
 import { COLOR } from "../config/constants";
 
-export default function Device({
-  name,
-  width,
-  height,
-  useragent,
-  scale,
-  commonUrl,
-  setCommonUrl,
-  deleteDevice,
-}) {
+export default function Device({ id, name, width, height, useragent }) {
   const webviewRef = useRef();
+  const dispatch = useDispatch();
+  const selectDeviceScale = useSelector((state) => state.device.deviceScale);
+  const selectCommonUrl = useSelector((state) => state.device.commonUrl);
 
   function handleWebviewDomReady() {
     setZoomLevel();
   }
 
   function setZoomLevel() {
-    scale < 1
+    selectDeviceScale < 1
       ? webviewRef.current.setZoomLevel(-2)
       : webviewRef.current.setZoomLevel(0);
   }
 
   useEffect(() => {
     webviewRef.current.addEventListener("dom-ready", handleWebviewDomReady);
+  }, [selectDeviceScale]);
 
-    return () =>
-      webviewRef.current.removeEventListener(
-        "dom-ready",
-        handleWebviewDomReady,
-      );
-  }, [scale]);
+  useEffect(() => {
+    webviewRef.current.addEventListener("did-navigate-in-page", (event) => {});
+  }, []);
 
   return (
     <DeviceContainer>
@@ -43,13 +40,24 @@ export default function Device({
           <span>{name}</span>
           <span>{` (${width} x ${height})`}</span>
         </div>
-        <DeleteButton onClick={deleteDevice}>-</DeleteButton>
+        <ButtonContainer>
+          <ReloadButton
+            onClick={() => {
+              webviewRef.current.reload();
+            }}
+          >
+            <TfiReload />
+          </ReloadButton>
+          <DeleteButton onClick={() => dispatch(deleteDisplayedDevice(id))}>
+            <RiDeleteBin5Fill />
+          </DeleteButton>
+        </ButtonContainer>
       </DeviceHeader>
       <WebviewContainer
-        scaledWidth={`${width * scale}px`}
-        scaledHeight={`${height * scale}px`}
+        scaledWidth={`${width * selectDeviceScale}px`}
+        scaledHeight={`${height * selectDeviceScale}px`}
       >
-        <webview src={commonUrl} useragent={useragent} ref={webviewRef} />
+        <webview src={selectCommonUrl} useragent={useragent} ref={webviewRef} />
       </WebviewContainer>
     </DeviceContainer>
   );
@@ -75,29 +83,52 @@ const DeviceHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0 0.5rem;
   height: 3rem;
+  background-color: ${COLOR.IVORY};
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+`;
+
+const ReloadButton = styled.button`
+  display: flex;
+  align-items: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  margin-right: 1rem;
+  font-size: 1rem;
+  border-radius: 10px;
+  background-color: ${COLOR.DARK_BLUE};
+  color: ${COLOR.IVORY};
+
+  &:hover {
+    background-color: ${COLOR.IVORY};
+    color: ${COLOR.DARK_BLUE};
+  }
 `;
 
 const DeleteButton = styled.button`
-  width: 3rem;
+  display: flex;
+  align-items: center;
+  width: 1.7rem;
+  height: 1.7rem;
   font-size: 1rem;
-  border-radius: 20px;
+  border-radius: 10px;
   background-color: ${COLOR.RED};
   color: ${COLOR.IVORY};
-  transition: all 200ms;
 
   &:hover {
-    background-color: ${COLOR.DARK_RED};
+    background-color: ${COLOR.IVORY};
+    color: ${COLOR.RED};
   }
 `;
 
 Device.propTypes = {
+  id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   useragent: PropTypes.string.isRequired,
-  scale: PropTypes.number.isRequired,
-  commonUrl: PropTypes.string.isRequired,
-  setCommonUrl: PropTypes.func.isRequired,
-  deleteDevice: PropTypes.func.isRequired,
 };

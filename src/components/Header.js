@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
-import PropTypes from "prop-types";
+
+import { updateCommonUrl } from "../features/device/deviceSlice";
 
 import { COLOR } from "../config/constants";
 
-export default function Header({ commonUrl, setCommonUrl }) {
+export default function Header() {
   const [localUrl, setLocalUrl] = useState();
+  const selectCommonUrl = useSelector((state) => state.device.commonUrl);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    setLocalUrl(commonUrl);
-  }, [commonUrl]);
+    setLocalUrl(selectCommonUrl);
+  }, [selectCommonUrl]);
 
   return (
     <Container>
@@ -18,7 +22,7 @@ export default function Header({ commonUrl, setCommonUrl }) {
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          setCommonUrl(localUrl);
+          dispatch(updateCommonUrl(localUrl));
         }}
       >
         <UrlInput
@@ -49,7 +53,6 @@ const Button = styled.button`
   border-radius: 5px;
   color: ${COLOR.IVORY};
   background-color: ${COLOR.DARK_BLUE};
-  transition: all 200ms;
 
   &:hover {
     color: ${COLOR.DARK_BLUE};
@@ -66,14 +69,4 @@ const UrlInput = styled.input`
   border-style: none;
   border-radius: 5px;
   background-color: ${COLOR.LIGHT_GRAY};
-  transition: all 300ms;
-
-  &:focus {
-    text-align: center;
-  }
 `;
-
-Header.propTypes = {
-  commonUrl: PropTypes.string.isRequired,
-  setCommonUrl: PropTypes.func.isRequired,
-};
