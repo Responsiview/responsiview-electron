@@ -13,7 +13,7 @@ import { COLOR } from "../config/constants";
 import { deviceData } from "../deviceData/deviceData";
 
 export default function Sidebar() {
-  const [isDevicesMenuOpen, setIsDevicesMenuOpen] = useState(true);
+  const [isDevicesMenuOpen, setIsDevicesMenuOpen] = useState(false);
   const selectAvailableDeviceIds = useSelector(
     (state) => state.device.availableDeviceIds,
   );
@@ -95,10 +95,11 @@ const SlideMenu = styled.div`
   align-items: center;
   flex-direction: column;
   position: relative;
+  width: 17rem;
   left: -100px;
   transform: translate(100px);
   transition: all 300ms;
-  padding: 1rem 2rem;
+  padding: 1rem;
   background-color: ${COLOR.BEIGE};
 `;
 

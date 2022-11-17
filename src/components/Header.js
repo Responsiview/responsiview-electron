@@ -2,13 +2,20 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 
-import { updateCommonUrl } from "../features/device/deviceSlice";
+import {
+  updateNavigationOffset,
+  updateNavigationHistory,
+} from "../features/device/deviceSlice";
+
+import correctUrl from "../utils/correctUrl";
 
 import { COLOR } from "../config/constants";
 
 export default function Header() {
   const [localUrl, setLocalUrl] = useState();
   const selectCommonUrl = useSelector((state) => state.device.commonUrl);
+  const selectCanGoBack = useSelector((state) => state.device.canGoBack);
+  const selectCanGoForward = useSelector((state) => state.device.canGoForward);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -17,12 +24,23 @@ export default function Header() {
 
   return (
     <Container>
-      <Button>{"<"}</Button>
-      <Button>{">"}</Button>
+      <Button
+        onClick={() => dispatch(updateNavigationOffset(-1))}
+        disabled={!selectCanGoBack}
+      >
+        {"<"}
+      </Button>
+      <Button
+        onClick={() => dispatch(updateNavigationOffset(1))}
+        disabled={!selectCanGoForward}
+      >
+        {">"}
+      </Button>
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          dispatch(updateCommonUrl(localUrl));
+
+          dispatch(updateNavigationHistory(correctUrl(localUrl)));
         }}
       >
         <UrlInput
@@ -57,6 +75,12 @@ const Button = styled.button`
   &:hover {
     color: ${COLOR.DARK_BLUE};
     background-color: ${COLOR.IVORY};
+  }
+
+  &:disabled {
+    color: ${COLOR.DARK_BLUE};
+    background-color: ${COLOR.DARK_GRAY};
+    cursor: not-allowed;
   }
 `;
 

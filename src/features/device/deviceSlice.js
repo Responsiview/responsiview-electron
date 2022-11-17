@@ -5,10 +5,14 @@ import { deviceData } from "../../deviceData/deviceData";
 const deviceSlice = createSlice({
   name: "deviceSlice",
   initialState: {
-    commonUrl: "https://www.google.com",
+    commonUrl: "https://www.google.com/",
     deviceScale: 1,
     displayedDeviceIds: [],
     availableDeviceIds: Object.keys(deviceData),
+    canGoBack: false,
+    canGoForward: false,
+    navigationOffset: 0,
+    navigationHistory: ["https://www.google.com/"],
   },
   reducers: {
     updateCommonUrl: (state, action) => {
@@ -41,6 +45,32 @@ const deviceSlice = createSlice({
     updateDeviceScale: (state, action) => {
       state.deviceScale = action.payload;
     },
+    updateNavigationOffset: (state, action) => {
+      state.navigationOffset += action.payload;
+
+      state.commonUrl = state.navigationHistory[state.navigationOffset];
+
+      state.canGoBack = state.navigationOffset > 0;
+      state.canGoForward =
+        state.navigationOffset < state.navigationHistory.length - 1;
+    },
+    updateNavigationHistory: (state, action) => {
+      if (state.navigationHistory[state.navigationOffset] === action.payload)
+        return;
+
+      const newNavigationHistory = state.navigationHistory.slice(
+        0,
+        state.navigationOffset + 1,
+      );
+
+      newNavigationHistory.push(action.payload);
+
+      state.navigationHistory = newNavigationHistory;
+      state.commonUrl = action.payload;
+      state.navigationOffset += 1;
+      state.canGoBack = true;
+      state.canGoForward = false;
+    },
   },
 });
 
@@ -50,4 +80,6 @@ export const {
   addDisplayedDevice,
   deleteDisplayedDevice,
   updateDeviceScale,
+  updateNavigationOffset,
+  updateNavigationHistory,
 } = deviceSlice.actions;

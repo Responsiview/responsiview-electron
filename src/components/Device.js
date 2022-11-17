@@ -5,32 +5,61 @@ import PropTypes from "prop-types";
 import { TfiReload } from "react-icons/tfi";
 import { RiDeleteBin5Fill } from "react-icons/ri";
 
-import { deleteDisplayedDevice } from "../features/device/deviceSlice";
+import {
+  deleteDisplayedDevice,
+  updateNavigationHistory,
+  updateCommonUrl,
+} from "../features/device/deviceSlice";
 
 import { COLOR } from "../config/constants";
 
 export default function Device({ id, name, width, height, useragent }) {
   const webviewRef = useRef();
+  const commonUrlRef = useRef();
+  const deviceScaleRef = useRef();
   const dispatch = useDispatch();
   const selectDeviceScale = useSelector((state) => state.device.deviceScale);
   const selectCommonUrl = useSelector((state) => state.device.commonUrl);
+  const selectNavigationOffset = useSelector(
+    (state) => state.device.navigationOffset,
+  );
+  const selectNavigationHistory = useSelector(
+    (state) => state.device.navigationHistory,
+  );
 
   function handleWebviewDomReady() {
     setZoomLevel();
   }
 
   function setZoomLevel() {
-    selectDeviceScale < 1
+    deviceScaleRef.current < 1
       ? webviewRef.current.setZoomLevel(-2)
       : webviewRef.current.setZoomLevel(0);
   }
 
+  function handleWebviewWillNavigate(event) {
+    if (commonUrlRef.current !== event.url) {
+      dispatch(updateNavigationHistory(event.url));
+    }
+  }
+
   useEffect(() => {
-    webviewRef.current.addEventListener("dom-ready", handleWebviewDomReady);
+    commonUrlRef.current = selectCommonUrl;
+  }, [selectCommonUrl]);
+
+  useEffect(() => {
+    deviceScaleRef.current = selectDeviceScale;
   }, [selectDeviceScale]);
 
   useEffect(() => {
-    webviewRef.current.addEventListener("did-navigate-in-page", (event) => {});
+    webviewRef.current.addEventListener("dom-ready", handleWebviewDomReady);
+    webviewRef.current.addEventListener(
+      "will-navigate",
+      handleWebviewWillNavigate,
+    );
+    webviewRef.current.addEventListener("did-redirect-navigation", (event) =>
+      dispatch(updateCommonUrl(event.url)),
+    );
   }, []);
 
   return (
@@ -57,7 +86,12 @@ export default function Device({ id, name, width, height, useragent }) {
         scaledWidth={`${width * selectDeviceScale}px`}
         scaledHeight={`${height * selectDeviceScale}px`}
       >
-        <webview src={selectCommonUrl} useragent={useragent} ref={webviewRef} />
+        <webview
+          className="webview"
+          src={selectNavigationHistory[selectNavigationOffset]}
+          useragent={useragent}
+          ref={webviewRef}
+        />
       </WebviewContainer>
     </DeviceContainer>
   );
@@ -72,7 +106,7 @@ const WebviewContainer = styled.div`
   width: ${(props) => props.scaledWidth};
   height: ${(props) => props.scaledHeight};
 
-  webview {
+  .webview {
     width: 100%;
     height: 100%;
     background-color: white;
