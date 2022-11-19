@@ -8,7 +8,12 @@ const deviceSlice = createSlice({
     commonUrl: "https://www.google.com/",
     deviceScale: 1,
     displayedDeviceIds: [],
-    availableDeviceIds: Object.keys(deviceData),
+    availableDeviceIds: Object.keys(deviceData).sort((a, b) => {
+      if (deviceData[a].type === deviceData[b].type)
+        return deviceData[a].width - deviceData[b].width;
+      if (deviceData[a].type > deviceData[b].type) return 1;
+      if (deviceData[a].type < deviceData[b].type) return -1;
+    }),
     canGoBack: false,
     canGoForward: false,
     navigationOffset: 0,
@@ -40,6 +45,12 @@ const deviceSlice = createSlice({
       const newAvailableDeviceIds = state.availableDeviceIds.slice();
 
       newAvailableDeviceIds.push(action.payload);
+      newAvailableDeviceIds.sort((a, b) => {
+        if (deviceData[a].type === deviceData[b].type)
+          return deviceData[a].width - deviceData[b].width;
+        if (deviceData[a].type > deviceData[b].type) return 1;
+        if (deviceData[a].type < deviceData[b].type) return -1;
+      });
       state.availableDeviceIds = newAvailableDeviceIds;
     },
     updateDeviceScale: (state, action) => {
