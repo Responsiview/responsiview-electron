@@ -14,8 +14,6 @@ function createWindow() {
     },
   });
 
-  ipcMain.handle("ping", () => "pong");
-
   mainWindow.loadURL("http://localhost:3000");
   mainWindow.webContents.openDevTools();
 }
