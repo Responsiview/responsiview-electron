@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 
 import Portal from "./Portal";
 
+import { COLOR } from "../config/constants";
+
 export default function Modal({ children, closeModal, style }) {
   const { width, height } =
     style === undefined ? { width: "30rem", height: "30rem" } : style;
@@ -45,8 +47,8 @@ const Content = styled.div`
   flex-direction: column;
   width: ${(props) => props.width};
   height: ${(props) => props.height};
-  background-color: #ebebeb;
-  color: #ffffff;
+  background-color: ${COLOR.LIGHT_GRAY};
+  color: ${COLOR.WHITE};
   border-radius: 10px;
   box-shadow: 1px 1px 1px black;
   animation: smoothOpen 0.3s;
@@ -54,7 +56,7 @@ const Content = styled.div`
   @keyframes smoothOpen {
     from {
       opacity: 0;
-      transform: translateY(-10%);
+      transform: translateY(100%);
     }
     to {
       opacity: 1;

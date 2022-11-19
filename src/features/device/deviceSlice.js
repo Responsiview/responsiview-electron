@@ -18,6 +18,7 @@ const deviceSlice = createSlice({
     canGoForward: false,
     navigationOffset: 0,
     navigationHistory: ["https://www.google.com/"],
+    presets: [],
   },
   reducers: {
     updateCommonUrl: (state, action) => {
@@ -82,6 +83,48 @@ const deviceSlice = createSlice({
       state.canGoBack = true;
       state.canGoForward = false;
     },
+    updatePresets: (state, action) => {
+      state.presets = action.payload;
+    },
+    addPreset: (state, action) => {
+      const newPresets = state.presets.slice();
+
+      newPresets.push(action.payload);
+      state.presets = newPresets;
+    },
+    loadPreset: (state, action) => {
+      const preset = action.payload;
+
+      state.commonUrl = preset.url;
+      state.navigationOffset = 0;
+      state.navigationHistory = [preset.url];
+      state.canGoBack = false;
+      state.canGoForward = false;
+      state.displayedDeviceIds = preset.deviceIdList;
+      state.availableDeviceIds = Object.keys(deviceData).filter(
+        (id) => !preset.deviceIdList.includes(id),
+      );
+    },
+    updateOnePreset: (state, action) => {
+      const updatedPreset = action.payload;
+      const newPresets = state.presets.slice();
+      const index = newPresets.findIndex(
+        (preset) => preset._id === updatedPreset._id,
+      );
+
+      newPresets[index] = updatedPreset;
+      state.presets = newPresets;
+    },
+    deleteOnePreset: (state, action) => {
+      const deletedPreset = action.payload;
+      const newPresets = state.presets.slice();
+      const index = newPresets.findIndex(
+        (preset) => preset._id === deletedPreset._id,
+      );
+
+      newPresets.splice(index, 1);
+      state.presets = newPresets;
+    },
   },
 });
 
@@ -93,4 +136,9 @@ export const {
   updateDeviceScale,
   updateNavigationOffset,
   updateNavigationHistory,
+  updatePresets,
+  addPreset,
+  loadPreset,
+  updateOnePreset,
+  deleteOnePreset,
 } = deviceSlice.actions;
