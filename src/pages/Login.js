@@ -1,6 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
+
+import { setUserInfo } from "../features/user/userSlice";
 
 import { provider, auth, googleSignIn } from "../service/firebase";
 
@@ -8,6 +11,7 @@ import { COLOR } from "../config/constants";
 
 export default function Login() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   return (
     <Content>
@@ -16,6 +20,8 @@ export default function Login() {
         onClick={async () => {
           try {
             const response = await googleSignIn(auth, provider);
+
+            dispatch(setUserInfo({ userEmail: response.data.userEmail }));
 
             if (response?.data.result === "ok") {
               navigate("/home", { replace: true });
