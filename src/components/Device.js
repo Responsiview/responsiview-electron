@@ -27,6 +27,14 @@ export default function Device({ id, name, width, height, useragent }) {
     (state) => state.device.navigationHistory,
   );
 
+  function handleReloadButtonClick() {
+    webviewRef.current.reload();
+  }
+
+  function handleDeleteButtonClick() {
+    dispatch(deleteDisplayedDevice(id));
+  }
+
   function handleWebviewDomReady() {
     setZoomLevel();
   }
@@ -43,6 +51,10 @@ export default function Device({ id, name, width, height, useragent }) {
     }
   }
 
+  function handleWebviewDidRedirectNavigation(event) {
+    dispatch(updateCommonUrl(event.url));
+  }
+
   useEffect(() => {
     commonUrlRef.current = selectCommonUrl;
   }, [selectCommonUrl]);
@@ -57,8 +69,9 @@ export default function Device({ id, name, width, height, useragent }) {
       "will-navigate",
       handleWebviewWillNavigate,
     );
-    webviewRef.current.addEventListener("did-redirect-navigation", (event) =>
-      dispatch(updateCommonUrl(event.url)),
+    webviewRef.current.addEventListener(
+      "did-redirect-navigation",
+      handleWebviewDidRedirectNavigation,
     );
   }, []);
 
@@ -70,14 +83,10 @@ export default function Device({ id, name, width, height, useragent }) {
           <span>{` (${width} x ${height})`}</span>
         </div>
         <ButtonContainer>
-          <ReloadButton
-            onClick={() => {
-              webviewRef.current.reload();
-            }}
-          >
+          <ReloadButton onClick={handleReloadButtonClick}>
             <TfiReload />
           </ReloadButton>
-          <DeleteButton onClick={() => dispatch(deleteDisplayedDevice(id))}>
+          <DeleteButton onClick={handleDeleteButtonClick}>
             <RiDeleteBin5Fill />
           </DeleteButton>
         </ButtonContainer>
@@ -91,6 +100,7 @@ export default function Device({ id, name, width, height, useragent }) {
           src={selectNavigationHistory[selectNavigationOffset]}
           useragent={useragent}
           ref={webviewRef}
+          preload={`file://${window.path.dirname()}/webview_preload.js`}
         />
       </WebviewContainer>
     </DeviceContainer>

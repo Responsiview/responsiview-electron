@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 import { updateDeviceScale } from "../features/device/deviceSlice";
 
-import Device from "../components/Device";
+import Device from "./Device";
 
 import { NUMBER } from "../config/constants";
 
