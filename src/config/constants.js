@@ -1,4 +1,5 @@
 export const COLOR = {
+  WHITE: "#FFFFFF",
   IVORY: "#F9F7F7",
   BEIGE: "#EAE3D2",
   LIGHT_GRAY: "#DBE2EF",
@@ -13,4 +14,5 @@ export const COLOR = {
 
 export const NUMBER = {
   BASE: 1.2,
+  DEBOUNCE_DELAY: 200,
 };
