@@ -1,41 +1,15 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 
-import { updateDeviceScale } from "../features/device/deviceSlice";
-
 import Device from "./Device";
-
-import { NUMBER } from "../config/constants";
 
 import { deviceData } from "../deviceData/deviceData";
 
 export default function DeviceSection() {
-  const dispatch = useDispatch();
   const selectDisplayedDeviceIds = useSelector(
     (state) => state.device.displayedDeviceIds,
   );
-
-  useEffect(() => {
-    checkDevicesAndUpdateScale();
-  }, [selectDisplayedDeviceIds]);
-
-  function checkDevicesAndUpdateScale() {
-    for (const deviceId of selectDisplayedDeviceIds) {
-      const maxSize = Math.max(
-        deviceData[deviceId].width,
-        deviceData[deviceId].height,
-      );
-
-      if (maxSize > 1000) {
-        dispatch(updateDeviceScale(Math.pow(NUMBER.BASE, -2)));
-
-        return;
-      }
-    }
-
-    dispatch(updateDeviceScale(1));
-  }
 
   return (
     <Container>

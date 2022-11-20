@@ -28,6 +28,23 @@ export default function Header() {
     setIsModalOpen(true);
   }
 
+  function handlePrevButtonClick() {
+    dispatch(updateNavigationOffset(-1));
+  }
+
+  function handleForwardButtonClick() {
+    dispatch(updateNavigationOffset(1));
+  }
+
+  function handleFormSubmit(event) {
+    event.preventDefault();
+    dispatch(updateNavigationHistory(correctUrl(localUrl)));
+  }
+
+  function handleInputChange(event) {
+    setLocalUrl(event.target.value);
+  }
+
   useEffect(() => {
     setLocalUrl(selectCommonUrl);
   }, [selectCommonUrl]);
@@ -44,28 +61,19 @@ export default function Header() {
       )}
       <Container>
         <NavigationButton
-          onClick={() => dispatch(updateNavigationOffset(-1))}
+          onClick={handlePrevButtonClick}
           disabled={!selectCanGoBack}
         >
           {"<"}
         </NavigationButton>
         <NavigationButton
-          onClick={() => dispatch(updateNavigationOffset(1))}
+          onClick={handleForwardButtonClick}
           disabled={!selectCanGoForward}
         >
           {">"}
         </NavigationButton>
-        <form
-          onSubmit={(event) => {
-            event.preventDefault();
-
-            dispatch(updateNavigationHistory(correctUrl(localUrl)));
-          }}
-        >
-          <UrlInput
-            value={localUrl || ""}
-            onChange={(event) => setLocalUrl(event.target.value)}
-          />
+        <form onSubmit={handleFormSubmit}>
+          <UrlInput value={localUrl || ""} onChange={handleInputChange} />
         </form>
         <FunctionButton onClick={handleSaveButtonClick}>
           <AiFillSave />

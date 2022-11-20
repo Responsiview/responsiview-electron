@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import PropTypes from "prop-types";
@@ -16,7 +16,7 @@ import { COLOR } from "../config/constants";
 export default function Device({ id, name, width, height, useragent }) {
   const webviewRef = useRef();
   const commonUrlRef = useRef();
-  const deviceScaleRef = useRef();
+  const [didMount, setDidMount] = useState(false);
   const dispatch = useDispatch();
   const selectDeviceScale = useSelector((state) => state.device.deviceScale);
   const selectCommonUrl = useSelector((state) => state.device.commonUrl);
@@ -35,16 +35,6 @@ export default function Device({ id, name, width, height, useragent }) {
     dispatch(deleteDisplayedDevice(id));
   }
 
-  function handleWebviewDomReady() {
-    setZoomLevel();
-  }
-
-  function setZoomLevel() {
-    deviceScaleRef.current < 1
-      ? webviewRef.current.setZoomLevel(-2)
-      : webviewRef.current.setZoomLevel(0);
-  }
-
   function handleWebviewWillNavigate(event) {
     if (commonUrlRef.current !== event.url) {
       dispatch(updateNavigationHistory(event.url));
@@ -60,11 +50,17 @@ export default function Device({ id, name, width, height, useragent }) {
   }, [selectCommonUrl]);
 
   useEffect(() => {
-    deviceScaleRef.current = selectDeviceScale;
+    if (didMount) {
+      webviewRef.current.setZoomFactor(selectDeviceScale);
+      webviewRef.current.executeJavaScript("window.scrollTo(0,0)");
+      webviewRef.current.reload();
+    }
   }, [selectDeviceScale]);
 
+  // useEffect(() => {}, []);
+
   useEffect(() => {
-    webviewRef.current.addEventListener("dom-ready", handleWebviewDomReady);
+    setDidMount(true);
     webviewRef.current.addEventListener(
       "will-navigate",
       handleWebviewWillNavigate,
@@ -78,10 +74,10 @@ export default function Device({ id, name, width, height, useragent }) {
   return (
     <DeviceContainer>
       <DeviceHeader>
-        <div>
+        <DeviceDescription>
           <span>{name}</span>
           <span>{` (${width} x ${height})`}</span>
-        </div>
+        </DeviceDescription>
         <ButtonContainer>
           <ReloadButton onClick={handleReloadButtonClick}>
             <TfiReload />
@@ -129,7 +125,15 @@ const DeviceHeader = styled.div`
   align-items: center;
   padding: 0 0.5rem;
   height: 3rem;
+  font-size: 1rem;
   background-color: ${COLOR.IVORY};
+`;
+
+const DeviceDescription = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  font-size: 0.9rem;
 `;
 
 const ButtonContainer = styled.div`
