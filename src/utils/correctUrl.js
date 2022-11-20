@@ -9,7 +9,7 @@ export default function correctUrl(url) {
     correctedUrl = "https://" + correctedUrl;
   }
 
-  if (!correctedUrl.includes("www")) {
+  if (!correctedUrl.includes("//www.") && !correctedUrl.includes("//m.")) {
     correctedUrl = correctedUrl.replace("//", "//www.");
   }
 
