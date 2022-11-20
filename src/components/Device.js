@@ -16,6 +16,7 @@ import { COLOR } from "../config/constants";
 export default function Device({ id, name, width, height, useragent }) {
   const webviewRef = useRef();
   const commonUrlRef = useRef();
+  const deviceScaleRef = useRef();
   const [didMount, setDidMount] = useState(false);
   const dispatch = useDispatch();
   const selectDeviceScale = useSelector((state) => state.device.deviceScale);
@@ -35,6 +36,10 @@ export default function Device({ id, name, width, height, useragent }) {
     dispatch(deleteDisplayedDevice(id));
   }
 
+  function handleWebviewDomReady() {
+    webviewRef.current.setZoomFactor(deviceScaleRef.current);
+  }
+
   function handleWebviewWillNavigate(event) {
     if (commonUrlRef.current !== event.url) {
       dispatch(updateNavigationHistory(event.url));
@@ -50,15 +55,17 @@ export default function Device({ id, name, width, height, useragent }) {
   }, [selectCommonUrl]);
 
   useEffect(() => {
+    deviceScaleRef.current = selectDeviceScale;
+
     if (didMount) {
       webviewRef.current.setZoomFactor(selectDeviceScale);
       webviewRef.current.executeJavaScript("window.scrollTo(0,0)");
-      webviewRef.current.reload();
     }
   }, [selectDeviceScale]);
 
   useEffect(() => {
     setDidMount(true);
+    webviewRef.current.addEventListener("dom-ready", handleWebviewDomReady);
     webviewRef.current.addEventListener(
       "will-navigate",
       handleWebviewWillNavigate,
