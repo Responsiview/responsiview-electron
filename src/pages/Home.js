@@ -19,9 +19,10 @@ export default function Home() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    try {
-      dispatch(setUserInfo({ userEmail: Cookie.get("userEmail") }));
-      (async function () {
+    dispatch(setUserInfo({ userEmail: Cookie.get("userEmail") }));
+
+    (async function () {
+      try {
         const response = await axios({
           method: "get",
           url: `${process.env.REACT_APP_BASE_SERVER_URL}/user/${Cookie.get(
@@ -34,16 +35,16 @@ export default function Home() {
         });
 
         dispatch(updatePresets(response.data));
-      })();
-    } catch (error) {
-      navigate("/error", {
-        state: {
-          errorStatus: error.response?.status,
-          errorMessage: error.response?.data.errorMessage,
-        },
-        replace: true,
-      });
-    }
+      } catch (error) {
+        navigate("/error", {
+          state: {
+            errorStatus: error.response?.status,
+            errorMessage: error.response?.data.errorMessage,
+          },
+          replace: true,
+        });
+      }
+    })();
   }, []);
 
   return (
