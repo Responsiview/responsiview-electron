@@ -24,9 +24,7 @@ export default function Login() {
 
             dispatch(setUserInfo({ userEmail: response.data.userEmail }));
 
-            if (response?.data.result === "ok") {
-              navigate("/home", { replace: true });
-            }
+            navigate("/home", { replace: true });
           } catch (error) {
             navigate("/error", {
               state: {

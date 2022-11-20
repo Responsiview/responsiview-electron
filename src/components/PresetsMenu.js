@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import Cookie from "js-cookie";
 import axios from "axios";
+import { IoMdAddCircleOutline } from "react-icons/io";
+
+import Modal from "./Modal";
+import PresetRegister from "./PresetRegister";
 
 import {
   loadPreset,
@@ -16,6 +20,8 @@ import { COLOR } from "../config/constants";
 export default function PresetsMenu() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const selectPresets = useSelector((state) => state.device.presets);
   const selectUserInfo = useSelector((state) => state.user.userInfo);
   const selectNavigationHistory = useSelector(
@@ -82,8 +88,20 @@ export default function PresetsMenu() {
     }
   }
 
+  function handleRegisterButtonClick() {
+    setIsModalOpen(true);
+  }
+
   return (
     <>
+      {isModalOpen && (
+        <Modal
+          closeModal={() => setIsModalOpen(false)}
+          style={{ width: "30rem", height: "20rem" }}
+        >
+          <PresetRegister closeModal={() => setIsModalOpen(false)} />
+        </Modal>
+      )}
       <Title>Preset List</Title>
       {selectPresets.length === 0
         ? "Empty"
@@ -112,6 +130,9 @@ export default function PresetsMenu() {
               </ButtonContainer>
             </Item>
           ))}
+      <RegisterButton onClick={handleRegisterButtonClick}>
+        <IoMdAddCircleOutline />
+      </RegisterButton>
     </>
   );
 }
@@ -152,5 +173,22 @@ const Button = styled.button`
   &:hover {
     color: ${(props) => props.backgroundColor};
     background-color: ${COLOR.IVORY};
+  }
+`;
+
+const RegisterButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  height: 2rem;
+  margin-top: 1rem;
+  font-size: 1.5rem;
+  border-radius: 5px;
+  background-color: ${COLOR.DARK_BLUE};
+  color: ${COLOR.IVORY};
+
+  &:hover {
+    background-color: ${COLOR.DARK_NAVY};
   }
 `;

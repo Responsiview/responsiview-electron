@@ -57,8 +57,6 @@ export default function Device({ id, name, width, height, useragent }) {
     }
   }, [selectDeviceScale]);
 
-  // useEffect(() => {}, []);
-
   useEffect(() => {
     setDidMount(true);
     webviewRef.current.addEventListener(

@@ -125,6 +125,22 @@ const deviceSlice = createSlice({
       newPresets.splice(index, 1);
       state.presets = newPresets;
     },
+    initDeviceSlice: (state) => {
+      state.commonUrl = "https://www.google.com/";
+      state.deviceScale = 1;
+      state.displayedDeviceIds = [];
+      state.availableDeviceIds = Object.keys(deviceData).sort((a, b) => {
+        if (deviceData[a].type === deviceData[b].type)
+          return deviceData[a].width - deviceData[b].width;
+        if (deviceData[a].type > deviceData[b].type) return 1;
+        if (deviceData[a].type < deviceData[b].type) return -1;
+      });
+      state.canGoBack = false;
+      state.canGoForward = false;
+      state.navigationOffset = 0;
+      state.navigationHistory = ["https://www.google.com/"];
+      state.presets = [];
+    },
   },
 });
 
@@ -141,4 +157,5 @@ export const {
   loadPreset,
   updateOnePreset,
   deleteOnePreset,
+  initDeviceSlice,
 } = deviceSlice.actions;

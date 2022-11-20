@@ -9,8 +9,11 @@ const userSlice = createSlice({
     setUserInfo: (state, action) => {
       state.userInfo = action.payload;
     },
+    initUserSlice: (state) => {
+      state.userInfo = {};
+    },
   },
 });
 
 export default userSlice;
-export const { setUserInfo } = userSlice.actions;
+export const { setUserInfo, initUserSlice } = userSlice.actions;

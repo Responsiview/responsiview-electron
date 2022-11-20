@@ -1,21 +1,25 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import styled from "styled-components";
-import { FcMultipleDevices } from "react-icons/fc";
+import { GoDeviceMobile } from "react-icons/go";
 import { AiOutlineUnorderedList } from "react-icons/ai";
+import { BsBarChartLineFill } from "react-icons/bs";
 
 import DevicesMenu from "./DevicesMenu";
 import PresetsMenu from "./PresetsMenu";
 
-import { updateDeviceScale } from "../features/device/deviceSlice";
+import { initUserSlice } from "../features/user/userSlice";
+import { initDeviceSlice } from "../features/device/deviceSlice";
 
 import { COLOR } from "../config/constants";
 
 export default function Sidebar() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [isDevicesMenuOpen, setIsDevicesMenuOpen] = useState(false);
   const [isPresetMenuOpen, setIsPresetMenuOpen] = useState(false);
-  const selectDeviceScale = useSelector((state) => state.device.deviceScale);
 
   function handleDevicesButtonClick() {
     setIsDevicesMenuOpen(!isDevicesMenuOpen);
@@ -27,52 +31,58 @@ export default function Sidebar() {
     setIsDevicesMenuOpen(false);
   }
 
-  function handleScaleDownButtonClick() {
-    if (selectDeviceScale - 0.1 < 0.5) return;
+  async function handleLogoutButtonClick() {
+    try {
+      await axios({
+        method: "post",
+        url: `${process.env.REACT_APP_BASE_SERVER_URL}/logout`,
+        withCredentials: true,
+      });
+    } catch (error) {
+      navigate("/error", {
+        state: {
+          errorStatus: error.response?.status,
+          errorMessage: error.response?.data.errorMessage,
+        },
+        replace: true,
+      });
+    }
 
-    dispatch(updateDeviceScale(selectDeviceScale - 0.1));
-  }
-  function handleScaleUpButtonClick() {
-    if (selectDeviceScale + 0.1 > 1) return;
+    dispatch(initUserSlice());
+    dispatch(initDeviceSlice());
 
-    dispatch(updateDeviceScale(selectDeviceScale + 0.1));
+    navigate("/", { replace: true });
   }
 
   return (
-    <Container>
-      <ButtonContainer>
-        <MenuButton
-          onClick={handleDevicesButtonClick}
-          isSelected={isDevicesMenuOpen}
-        >
-          <FcMultipleDevices />
-          Devices
-        </MenuButton>
-        <MenuButton
-          onClick={handlePresetsButtonClick}
-          isSelected={isPresetMenuOpen}
-        >
-          <AiOutlineUnorderedList />
-          Presets
-        </MenuButton>
-        <ScaleContainer>
-          <ScaleDisplay>{Math.floor(selectDeviceScale * 100)} %</ScaleDisplay>
-          <ScaleButtons>
-            <ScaleButton
-              onClick={handleScaleDownButtonClick}
-              backgroundColor={COLOR.RED}
+    <>
+      <Container>
+        <TopContainer>
+          <MenuButtons>
+            <MenuButton
+              onClick={handleDevicesButtonClick}
+              isSelected={isDevicesMenuOpen}
             >
-              -
-            </ScaleButton>
-            <ScaleButton
-              onClick={handleScaleUpButtonClick}
-              backgroundColor={COLOR.DARK_BLUE}
+              <GoDeviceMobile />
+              Devices
+            </MenuButton>
+            <MenuButton
+              onClick={handlePresetsButtonClick}
+              isSelected={isPresetMenuOpen}
             >
-              +
-            </ScaleButton>
-          </ScaleButtons>
-        </ScaleContainer>
-      </ButtonContainer>
+              <AiOutlineUnorderedList />
+              Presets
+            </MenuButton>
+            <MenuButton>
+              <BsBarChartLineFill />
+              FCP
+            </MenuButton>
+          </MenuButtons>
+        </TopContainer>
+        <BottomContainer>
+          <LogoutButton onClick={handleLogoutButtonClick}>Logout</LogoutButton>
+        </BottomContainer>
+      </Container>
       {isDevicesMenuOpen && (
         <SlideMenu>
           <DevicesMenu />
@@ -83,18 +93,29 @@ export default function Sidebar() {
           <PresetsMenu />
         </SlideMenu>
       )}
-    </Container>
+    </>
   );
 }
+
 const Container = styled.div`
   display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: ${COLOR.DARK_NAVY};
+  height: ${`calc(100vh - 4rem)`};
 `;
 
-const ButtonContainer = styled.div`
+const TopContainer = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
+`;
 
-  height: 100vh;
+const MenuButtons = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
   background-color: ${COLOR.DARK_NAVY};
   z-index: 999;
 `;
@@ -103,6 +124,7 @@ const MenuButton = styled.button`
   display: flex;
   align-items: center;
   flex-direction: column;
+
   padding: 1.5rem 1rem;
   font-size: 1rem;
   border-bottom: 0.5px solid ${COLOR.DARK_NAVY};
@@ -116,40 +138,24 @@ const MenuButton = styled.button`
   }
 `;
 
-const ScaleContainer = styled.div`
+const BottomContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
-`;
-const ScaleDisplay = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 80%;
-  height: 2rem;
-  margin-top: 1rem;
-  border-radius: 10px;
-  background-color: ${COLOR.IVORY};
 `;
 
-const ScaleButtons = styled.div`
-  display: flex;
-  justify-content: space-evenly;
-  width: 100%;
-  margin: 0.5rem 0;
-`;
-
-const ScaleButton = styled.button`
-  width: 2rem;
-  height: 1.5rem;
-  border-radius: 10px;
+const LogoutButton = styled.button`
+  margin: 3rem 0.5rem 0.5rem 0.5rem;
+  width: 90%;
+  height: 3rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  background-color: ${COLOR.RED};
   color: ${COLOR.IVORY};
-  background-color: ${(props) => props.backgroundColor};
 
   &:hover {
-    color: ${(props) => props.backgroundColor};
-    background-color: ${COLOR.IVORY};
+    background-color: ${COLOR.DARK_RED};
+    color: ${COLOR.IVORY};
   }
 `;
 
@@ -157,7 +163,7 @@ const SlideMenu = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  width: 17rem;
+  width: 24rem;
   padding: 1rem;
   background-color: ${COLOR.BEIGE};
 `;
