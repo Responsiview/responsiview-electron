@@ -18,6 +18,10 @@ export const provider = new GoogleAuthProvider();
 export const auth = getAuth();
 
 export async function googleSignIn(auth, provider) {
+  provider.setCustomParameters({
+    prompt: "select_account",
+  });
+
   const result = await signInWithPopup(auth, provider);
   const response = await axios({
     method: "post",
