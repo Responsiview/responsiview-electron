@@ -10,6 +10,7 @@ export const COLOR = {
   DARK_BLUE: "#3F72AF",
   RED: "#F55858",
   DARK_RED: "#c70e00",
+  LIGHT_GREEN: "#82CA9D",
 };
 
 export const NUMBER = {
