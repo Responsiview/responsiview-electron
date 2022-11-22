@@ -9,6 +9,8 @@ import { BsBarChartLineFill } from "react-icons/bs";
 
 import DevicesMenu from "./DevicesMenu";
 import PresetsMenu from "./PresetsMenu";
+import Modal from "./Modal";
+import PerformanceCheck from "./PerformanceCheck";
 
 import { initUserSlice } from "../features/user/userSlice";
 import { initDeviceSlice } from "../features/device/deviceSlice";
@@ -20,15 +22,24 @@ export default function Sidebar() {
   const navigate = useNavigate();
   const [isDevicesMenuOpen, setIsDevicesMenuOpen] = useState(false);
   const [isPresetMenuOpen, setIsPresetMenuOpen] = useState(false);
+  const [isFCPModalOpen, setIsFCPModalOpen] = useState(false);
 
   function handleDevicesButtonClick() {
     setIsDevicesMenuOpen(!isDevicesMenuOpen);
     setIsPresetMenuOpen(false);
+    setIsFCPModalOpen(false);
   }
 
   function handlePresetsButtonClick() {
     setIsPresetMenuOpen(!isPresetMenuOpen);
     setIsDevicesMenuOpen(false);
+    setIsFCPModalOpen(false);
+  }
+
+  function handleFCPButtonClick() {
+    setIsFCPModalOpen(!isFCPModalOpen);
+    setIsDevicesMenuOpen(false);
+    setIsPresetMenuOpen(false);
   }
 
   async function handleLogoutButtonClick() {
@@ -56,6 +67,14 @@ export default function Sidebar() {
 
   return (
     <>
+      {isFCPModalOpen && (
+        <Modal
+          closeModal={() => setIsFCPModalOpen(false)}
+          style={{ width: "50rem", height: "30rem" }}
+        >
+          <PerformanceCheck closeModal={() => setIsFCPModalOpen(false)} />
+        </Modal>
+      )}
       <Container>
         <TopContainer>
           <MenuButtons>
@@ -73,9 +92,14 @@ export default function Sidebar() {
               <AiOutlineUnorderedList />
               Presets
             </MenuButton>
-            <MenuButton>
+            <MenuButton
+              onClick={handleFCPButtonClick}
+              isSelected={isFCPModalOpen}
+            >
               <BsBarChartLineFill />
-              FCP
+              Measure
+              <br />
+              Time
             </MenuButton>
           </MenuButtons>
         </TopContainer>
