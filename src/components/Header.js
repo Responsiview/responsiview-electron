@@ -9,6 +9,7 @@ import {
   updateNavigationHistory,
   updateDeviceScale,
 } from "../features/device/deviceSlice";
+import { addToast } from "../features/toast/toastSlice";
 
 import correctUrl from "../utils/correctUrl";
 
@@ -40,13 +41,21 @@ export default function Header() {
   }
 
   function handleScaleDownButtonClick() {
-    if (selectDeviceScale - 0.1 < 0.5) return;
+    if (selectDeviceScale - 0.1 < 0.5) {
+      dispatch(addToast("최소 배율은 50% 입니다."));
+
+      return;
+    }
 
     dispatch(updateDeviceScale(selectDeviceScale - 0.1));
   }
 
   function handleScaleUpButtonClick() {
-    if (selectDeviceScale + 0.1 > 1) return;
+    if (selectDeviceScale + 0.1 > 1) {
+      dispatch(addToast("최대 배율은 100% 입니다."));
+
+      return;
+    }
 
     dispatch(updateDeviceScale(selectDeviceScale + 0.1));
   }

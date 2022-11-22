@@ -1,16 +1,19 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
 import Chart from "./Chart";
 import Loading from "./Loading";
 
+import { addToast } from "../features/toast/toastSlice";
+
 import { deviceData } from "../utils/deviceData";
 
 import { COLOR } from "../config/constants";
 
 export default function PerformanceCheck({ closeModal }) {
+  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [measuringResult, setMeasuringResult] = useState();
 
@@ -25,6 +28,12 @@ export default function PerformanceCheck({ closeModal }) {
   );
 
   async function handleMeasureButtonClick() {
+    if (selectDisplayedDeviceIds.length === 0) {
+      dispatch(addToast("선택된 기기가 없습니다."));
+
+      return;
+    }
+
     setIsLoading(true);
 
     const deviceInfo = {

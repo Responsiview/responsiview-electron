@@ -14,6 +14,7 @@ import PerformanceCheck from "./PerformanceCheck";
 
 import { initUserSlice } from "../features/user/userSlice";
 import { initDeviceSlice } from "../features/device/deviceSlice";
+import { addToast } from "../features/toast/toastSlice";
 
 import { COLOR } from "../config/constants";
 
@@ -49,6 +50,8 @@ export default function Sidebar() {
         url: `${process.env.REACT_APP_BASE_SERVER_URL}/logout`,
         withCredentials: true,
       });
+
+      dispatch(addToast("로그아웃 되었습니다."));
     } catch (error) {
       navigate("/error", {
         state: {
@@ -97,9 +100,7 @@ export default function Sidebar() {
               isSelected={isFCPModalOpen}
             >
               <BsBarChartLineFill />
-              Measure
-              <br />
-              Time
+              Measuring
             </MenuButton>
           </MenuButtons>
         </TopContainer>
@@ -141,7 +142,6 @@ const MenuButtons = styled.div`
   justify-content: space-between;
   width: 100%;
   background-color: ${COLOR.DARK_NAVY};
-  z-index: 999;
 `;
 
 const MenuButton = styled.button`
@@ -164,14 +164,13 @@ const MenuButton = styled.button`
 
 const BottomContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.3rem;
 `;
 
 const LogoutButton = styled.button`
-  margin: 3rem 0.5rem 0.5rem 0.5rem;
   width: 90%;
-  height: 3rem;
+  height: 4rem;
   font-size: 1rem;
   border-radius: 5px;
   background-color: ${COLOR.RED};

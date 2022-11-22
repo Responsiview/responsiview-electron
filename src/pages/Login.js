@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { FcGoogle } from "react-icons/fc";
 
 import { setUserInfo } from "../features/user/userSlice";
+import { addToast } from "../features/toast/toastSlice";
 
 import { provider, auth, googleSignIn } from "../service/firebase";
 
@@ -23,7 +24,7 @@ export default function Login() {
             const response = await googleSignIn(auth, provider);
 
             dispatch(setUserInfo({ userEmail: response.data.userEmail }));
-
+            dispatch(addToast(`어서오세요, ${response.data.userEmail}님!`));
             navigate("/home", { replace: true });
           } catch (error) {
             navigate("/error", {

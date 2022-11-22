@@ -14,6 +14,7 @@ import {
   updateOnePreset,
   deleteOnePreset,
 } from "../features/device/deviceSlice";
+import { addToast } from "../features/toast/toastSlice";
 
 import { COLOR } from "../config/constants";
 
@@ -35,6 +36,7 @@ export default function PresetsMenu() {
   );
 
   function handleLoadButtonClick(preset) {
+    dispatch(addToast(`Preset (${preset.title})이 로드되었습니다.`));
     dispatch(loadPreset(preset));
   }
 
@@ -54,6 +56,7 @@ export default function PresetsMenu() {
       });
 
       dispatch(updateOnePreset(response.data.updatedPreset));
+      dispatch(addToast(`Preset (${preset.title})이 업데이트 되었습니다.`));
     } catch (error) {
       navigate("/error", {
         state: {
@@ -77,6 +80,7 @@ export default function PresetsMenu() {
       });
 
       dispatch(deleteOnePreset(preset));
+      dispatch(addToast(`Preset (${preset.title})이 삭제되었습니다.`));
     } catch (error) {
       navigate("/error", {
         state: {

@@ -8,6 +8,7 @@ import Cookie from "js-cookie";
 import { debounce } from "lodash";
 
 import { addPreset } from "../features/device/deviceSlice";
+import { addToast } from "../features/toast/toastSlice";
 
 import { COLOR, NUMBER } from "../config/constants";
 
@@ -38,6 +39,18 @@ export default function PresetRegister({ closeModal }) {
   }
 
   async function handleSaveButtonClick() {
+    if (presetTitle === "") {
+      dispatch(addToast("Preset Title을 입력해주세요."));
+
+      return;
+    }
+
+    if (selectDisplayedDeviceIds.length === 0) {
+      dispatch(addToast("선택된 기기가 없습니다."));
+
+      return;
+    }
+
     try {
       const response = await axios({
         method: "post",
@@ -54,6 +67,7 @@ export default function PresetRegister({ closeModal }) {
       });
 
       dispatch(addPreset(response.data.createdPreset));
+      dispatch(addToast(`Preset (${presetTitle})이 생성되었습니다.`));
       closeModal();
     } catch (error) {
       navigate("/error", {
