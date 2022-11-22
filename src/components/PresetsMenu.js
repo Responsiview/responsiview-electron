@@ -141,6 +141,7 @@ const Title = styled.p`
   text-align: center;
   font-size: 1.5rem;
   margin: 1rem 0;
+  font-weight: bold;
   color: ${COLOR.DARK_NAVY};
 `;
 
@@ -180,9 +181,9 @@ const RegisterButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 90%;
+  width: 100%;
   height: 2rem;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
   font-size: 1.5rem;
   border-radius: 5px;
   background-color: ${COLOR.DARK_BLUE};

@@ -95,6 +95,7 @@ const Container = styled.div`
 const Title = styled.p`
   text-align: left;
   font-size: 2rem;
+  font-weight: bold;
   color: ${COLOR.DARK_NAVY};
 `;
 
