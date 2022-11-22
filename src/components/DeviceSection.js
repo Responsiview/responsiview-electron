@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 import Device from "./Device";
 
-import { deviceData } from "../deviceData/deviceData";
+import { deviceData } from "../utils/deviceData";
 
 export default function DeviceSection() {
   const selectDisplayedDeviceIds = useSelector(

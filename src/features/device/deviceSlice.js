@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { deviceData } from "../../deviceData/deviceData";
+import { deviceData } from "../../utils/deviceData";
 
 const deviceSlice = createSlice({
   name: "deviceSlice",

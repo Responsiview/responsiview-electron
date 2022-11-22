@@ -6,7 +6,7 @@ import { addDisplayedDevice } from "../features/device/deviceSlice";
 
 import { COLOR } from "../config/constants";
 
-import { deviceData } from "../deviceData/deviceData";
+import { deviceData } from "../utils/deviceData";
 
 export default function DevicesMenu() {
   const selectAvailableDeviceIds = useSelector(
@@ -39,6 +39,7 @@ const Title = styled.p`
   text-align: center;
   font-size: 1.5rem;
   margin: 1rem 0;
+  font-weight: bold;
   color: ${COLOR.DARK_NAVY};
 `;
 
