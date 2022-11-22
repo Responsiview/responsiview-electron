@@ -59,9 +59,23 @@ const deviceSlice = createSlice({
     },
     updateNavigationOffset: (state, action) => {
       state.navigationOffset += action.payload;
+      state.commonUrl = state.navigationHistory[state.navigationOffset];
+      state.canGoBack = state.navigationOffset > 0;
+      state.canGoForward =
+        state.navigationOffset < state.navigationHistory.length - 1;
+    },
+    rollbackNavigation: (state) => {
+      if (state.navigationOffset > 0) {
+        state.navigationOffset -= 1;
+      }
+      if (state.navigationHistory.length > 0) {
+        state.navigationHistory = state.navigationHistory.slice(
+          0,
+          state.navigationHistory.length - 1,
+        );
+      }
 
       state.commonUrl = state.navigationHistory[state.navigationOffset];
-
       state.canGoBack = state.navigationOffset > 0;
       state.canGoForward =
         state.navigationOffset < state.navigationHistory.length - 1;
@@ -151,6 +165,7 @@ export const {
   deleteDisplayedDevice,
   updateDeviceScale,
   updateNavigationOffset,
+  rollbackNavigation,
   updateNavigationHistory,
   updatePresets,
   addPreset,

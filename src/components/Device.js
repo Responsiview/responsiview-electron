@@ -9,7 +9,9 @@ import {
   deleteDisplayedDevice,
   updateNavigationHistory,
   updateCommonUrl,
+  rollbackNavigation,
 } from "../features/device/deviceSlice";
+import { addToast } from "../features/toast/toastSlice";
 
 import { COLOR } from "../config/constants";
 
@@ -50,6 +52,11 @@ export default function Device({ id, name, width, height, useragent }) {
     dispatch(updateCommonUrl(event.url));
   }
 
+  function handleWebviewDidFailLoad(event) {
+    dispatch(addToast(`${event.validatedURL}은 유효하지 않은 주소입니다.`));
+    dispatch(rollbackNavigation());
+  }
+
   useEffect(() => {
     commonUrlRef.current = selectCommonUrl;
   }, [selectCommonUrl]);
@@ -73,6 +80,10 @@ export default function Device({ id, name, width, height, useragent }) {
     webviewRef.current.addEventListener(
       "did-redirect-navigation",
       handleWebviewDidRedirectNavigation,
+    );
+    webviewRef.current.addEventListener(
+      "did-fail-load",
+      handleWebviewDidFailLoad,
     );
   }, []);
 
