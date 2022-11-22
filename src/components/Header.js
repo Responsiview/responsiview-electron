@@ -68,7 +68,10 @@ export default function Header() {
     <>
       <Container>
         <LogoSection>
-          <FcMultipleDevices />
+          <Icon>
+            <FcMultipleDevices />
+          </Icon>
+          Responsiview
         </LogoSection>
         <NavigationContainer>
           <NavigationButton
@@ -126,8 +129,15 @@ const LogoSection = styled.div`
   align-items: center;
   width: 15rem;
   height: 100%;
-  font-size: 2rem;
+  font-size: 1.2rem;
+  font-weight: bold;
   color: ${COLOR.IVORY};
+`;
+
+const Icon = styled.div`
+  margin-right: 0.5rem;
+  padding-top: 0.5rem;
+  font-size: 2rem;
 `;
 
 const NavigationContainer = styled.div`
