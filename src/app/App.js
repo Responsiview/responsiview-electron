@@ -6,11 +6,13 @@ import Login from "../pages/Login";
 import Home from "../pages/Home";
 import Error from "../pages/Error";
 import NotFound from "../pages/NotFound";
+import ToastContainer from "../components/Toast/ToastContainer";
 
 export default function App() {
   return (
     <>
       <Global />
+      <ToastContainer />
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/home" element={<Home />} />
