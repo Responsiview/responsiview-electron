@@ -5,7 +5,6 @@ import { createGlobalStyle } from "styled-components";
 import Login from "../pages/Login";
 import Home from "../pages/Home";
 import Error from "../pages/Error";
-import NotFound from "../pages/NotFound";
 import ToastContainer from "../components/Toast/ToastContainer";
 
 export default function App() {
@@ -17,7 +16,7 @@ export default function App() {
         <Route path="/" element={<Login />} />
         <Route path="/home" element={<Home />} />
         <Route path="/error" element={<Error />} />
-        <Route path="*" element={<NotFound />} />
+        <Route path="*" element={<Error />} />
       </Routes>
     </>
   );
