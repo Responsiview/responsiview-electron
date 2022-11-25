@@ -4,7 +4,9 @@
   "author": "Gyutae Park",
   "private": true,
   "dependencies": {
+    "@electron/remote": "^2.0.8",
     "@reduxjs/toolkit": "^1.9.0",
+    "electron-is-dev": "^2.0.0",
     "firebase": "^9.14.0",
     "js-cookie": "^3.0.1",
     "lodash": "^4.17.21",
@@ -18,13 +20,25 @@
     "recharts": "^2.1.16",
     "styled-components": "^5.3.6"
   },
-  "main": "src/mainProcess/main.js",
+  "main": "public/electron.js",
+  "homepage": "./",
   "scripts": {
     "start": "concurrently \"react-scripts start\" \"npm run electron\" ",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "electron": "wait-on http://localhost:3000 && electron ."
+    "electron": "wait-on http://localhost:3000 && electron .",
+    "electron-package": "npm run build && electron-builder"
+  },
+  "build": {
+    "protocols": [
+      {
+        "name": "Responsiview",
+        "schemes": [
+          "responsiview"
+        ]
+      }
+    ]
   },
   "eslintConfig": {
     "extends": [
@@ -50,6 +64,7 @@
     "@testing-library/user-event": "^14.4.3",
     "concurrently": "^7.5.0",
     "electron": "^21.2.2",
+    "electron-builder": "^24.0.0-alpha.3",
     "eslint": "^8.27.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
