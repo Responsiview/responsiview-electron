@@ -15,15 +15,14 @@ import { COLOR } from "../config/constants";
 export default function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const ipcRenderer = window.electron.ipcRenderer;
 
   function handleSignInButtonClick() {
     window.remote.openExternalLoginPage(process.env.REACT_APP_LOGIN_CLIENT_URL);
   }
 
   useEffect(() => {
-    const ipcRenderer = window.electron.ipcRenderer;
-
-    ipcRenderer.on("login-result", async (event, data) => {
+    ipcRenderer.once("login-result", async (event, data) => {
       const loginResult = convertLoginData(data);
 
       if (loginResult.result === "success") {
@@ -39,6 +38,11 @@ export default function Login() {
             key: "userEmail",
             value: response.data.userEmail,
           });
+          ipcRenderer.send("setCookie", {
+            key: "token",
+            value: response.data.token,
+          });
+
           dispatch(setUserInfo({ userEmail: response.data.userEmail }));
           dispatch(addToast(`어서오세요, ${response.data.userEmail}님!`));
           navigate("/home", { replace: true });
