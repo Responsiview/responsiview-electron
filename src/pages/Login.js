@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import axios from "axios";
 import { FcGoogle } from "react-icons/fc";
 
 import { setUserInfo } from "../features/user/userSlice";
 import { addToast } from "../features/toast/toastSlice";
 
-import { provider, auth, googleSignIn } from "../service/firebase";
+import convertLoginData from "../utils/convertLoginData";
 
 import { COLOR } from "../config/constants";
 
@@ -15,28 +16,57 @@ export default function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  function handleSignInButtonClick() {
+    window.remote.openExternalLoginPage(process.env.REACT_APP_LOGIN_CLIENT_URL);
+  }
+
+  useEffect(() => {
+    const ipcRenderer = window.electron.ipcRenderer;
+
+    ipcRenderer.on("login-result", async (event, data) => {
+      const loginResult = convertLoginData(data);
+
+      if (loginResult.result === "success") {
+        try {
+          const response = await axios({
+            method: "post",
+            url: `${process.env.REACT_APP_BASE_SERVER_URL}/login`,
+            data: { userEmail: loginResult.userEmail },
+            withCredentials: true,
+          });
+
+          ipcRenderer.send("setCookie", {
+            key: "userEmail",
+            value: response.data.userEmail,
+          });
+          dispatch(setUserInfo({ userEmail: response.data.userEmail }));
+          dispatch(addToast(`어서오세요, ${response.data.userEmail}님!`));
+          navigate("/home", { replace: true });
+        } catch (error) {
+          navigate("/error", {
+            state: {
+              errorStatus: error.response?.status,
+              errorMessage: error.response?.data.errorMessage,
+            },
+            replace: true,
+          });
+        }
+      } else {
+        navigate("/error", {
+          state: {
+            errorStatus: loginResult.code,
+            errorMessage: loginResult.message,
+          },
+          replace: true,
+        });
+      }
+    });
+  }, []);
+
   return (
     <Content>
       <Title>Responsiview</Title>
-      <SignInButton
-        onClick={async () => {
-          try {
-            const response = await googleSignIn(auth, provider);
-
-            dispatch(setUserInfo({ userEmail: response.data.userEmail }));
-            dispatch(addToast(`어서오세요, ${response.data.userEmail}님!`));
-            navigate("/home", { replace: true });
-          } catch (error) {
-            navigate("/error", {
-              state: {
-                errorStatus: error.response?.status,
-                errorMessage: error.response?.data.errorMessage,
-              },
-              replace: true,
-            });
-          }
-        }}
-      >
+      <SignInButton onClick={handleSignInButtonClick}>
         <IconContainer>
           <FcGoogle />
         </IconContainer>
