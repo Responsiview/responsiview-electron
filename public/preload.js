@@ -18,6 +18,7 @@ contextBridge.exposeInMainWorld("electron", {
   ipcRenderer: {
     ...ipcRenderer,
     on: ipcRenderer.on.bind(ipcRenderer),
-    removeListener: ipcRenderer.removeListener.bind(ipcRenderer),
+    once: ipcRenderer.once.bind(ipcRenderer),
+    removeAllListeners: ipcRenderer.removeAllListeners.bind(ipcRenderer),
   },
 });

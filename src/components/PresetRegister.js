@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import axios from "axios";
-import Cookie from "js-cookie";
 import { debounce } from "lodash";
 
 import { addPreset } from "../features/device/deviceSlice";
@@ -16,6 +15,7 @@ export default function PresetRegister({ closeModal }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [presetTitle, setPresetTitle] = useState("");
+  const ipcRenderer = window.electron.ipcRenderer;
 
   const selectUserInfo = useSelector((state) => state.user.userInfo);
   const selectNavigationHistory = useSelector(
@@ -52,6 +52,8 @@ export default function PresetRegister({ closeModal }) {
     }
 
     try {
+      const token = await ipcRenderer.invoke("getCookie", "token");
+
       const response = await axios({
         method: "post",
         url: `${process.env.REACT_APP_BASE_SERVER_URL}/user/${selectUserInfo.userEmail}/preset`,
@@ -61,7 +63,7 @@ export default function PresetRegister({ closeModal }) {
           deviceIdList: selectDisplayedDeviceIds,
         },
         headers: {
-          Authorization: `Bearer ${Cookie.get("token")}`,
+          Authorization: `Bearer ${token}`,
         },
         withCredentials: true,
       });

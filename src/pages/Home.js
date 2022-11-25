@@ -2,14 +2,12 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import Cookie from "js-cookie";
 import axios from "axios";
 
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import DeviceSection from "../components/DeviceSection";
 
-import { setUserInfo } from "../features/user/userSlice";
 import { updatePresets } from "../features/device/deviceSlice";
 
 import { COLOR } from "../config/constants";
@@ -17,19 +15,19 @@ import { COLOR } from "../config/constants";
 export default function Home() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const ipcRenderer = window.electron.ipcRenderer;
 
   useEffect(() => {
-    dispatch(setUserInfo({ userEmail: Cookie.get("userEmail") }));
-
     (async function () {
       try {
+        const userEmail = await ipcRenderer.invoke("getCookie", "userEmail");
+        const token = await ipcRenderer.invoke("getCookie", "token");
+
         const response = await axios({
           method: "get",
-          url: `${process.env.REACT_APP_BASE_SERVER_URL}/user/${Cookie.get(
-            "userEmail",
-          )}/preset`,
+          url: `${process.env.REACT_APP_BASE_SERVER_URL}/user/${userEmail}/preset`,
           headers: {
-            Authorization: `Bearer ${Cookie.get("token")}`,
+            Authorization: `Bearer ${token}`,
           },
           withCredentials: true,
         });

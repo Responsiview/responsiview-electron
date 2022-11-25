@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
-import Cookie from "js-cookie";
 import axios from "axios";
 import { IoMdAddCircleOutline } from "react-icons/io";
 
@@ -22,6 +21,7 @@ export default function PresetsMenu() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const ipcRenderer = window.electron.ipcRenderer;
 
   const selectPresets = useSelector((state) => state.device.presets);
   const selectUserInfo = useSelector((state) => state.user.userInfo);
@@ -42,6 +42,8 @@ export default function PresetsMenu() {
 
   async function handleUpdateButtonClick(preset) {
     try {
+      const token = await ipcRenderer.invoke("getCookie", "token");
+
       const response = await axios({
         method: "put",
         url: `${process.env.REACT_APP_BASE_SERVER_URL}/user/${selectUserInfo.userEmail}/preset/${preset._id}`,
@@ -50,7 +52,7 @@ export default function PresetsMenu() {
           deviceIdList: selectDisplayedDeviceIds,
         },
         headers: {
-          Authorization: `Bearer ${Cookie.get("token")}`,
+          Authorization: `Bearer ${token}`,
         },
         withCredentials: true,
       });
@@ -70,11 +72,13 @@ export default function PresetsMenu() {
 
   async function handleDeleteButtonClick(preset) {
     try {
+      const token = await ipcRenderer.invoke("getCookie", "token");
+
       await axios({
         method: "delete",
         url: `${process.env.REACT_APP_BASE_SERVER_URL}/user/${selectUserInfo.userEmail}/preset/${preset._id}`,
         headers: {
-          Authorization: `Bearer ${Cookie.get("token")}`,
+          Authorization: `Bearer ${token}`,
         },
         withCredentials: true,
       });

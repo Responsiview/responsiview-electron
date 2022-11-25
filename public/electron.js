@@ -29,15 +29,33 @@ function createWindow() {
 
   ipcMain.handle(
     "measureFCPTime",
-    async (event, deviceInfo) => await measureFCPTime(deviceInfo),
+    async (_, deviceInfo) => await measureFCPTime(deviceInfo),
   );
-  ipcMain.on("setCookie", (event, cookie) =>
-    session.defaultSession.cookies.set({
-      url: "url",
+
+  ipcMain.handle("getCookie", async (_, cookieKey) => {
+    const cookie = await session.defaultSession.cookies.get({
+      name: cookieKey,
+    });
+
+    return cookie[0].value;
+  });
+  ipcMain.on("setCookie", async (_, cookie) => {
+    await session.defaultSession.cookies.set({
+      url: "https://responsiview-firebase-login.netlify.app",
       name: cookie.key,
       value: cookie.value,
-    }),
-  );
+    });
+  });
+  ipcMain.on("removeAllCookies", async () => {
+    const cookies = await session.defaultSession.cookies.get({});
+
+    cookies.forEach((cookie) =>
+      session.defaultSession.cookies.remove({
+        url: "https://responsiview-firebase-login.netlify.app",
+        name: cookie.name,
+      }),
+    );
+  });
 
   mainWindow.loadURL(
     isDev
@@ -66,7 +84,7 @@ app.whenReady().then(() => {
 
 app.setAsDefaultProtocolClient("responsiview");
 
-app.on("open-url", (event, data) => {
+app.on("open-url", (_, data) => {
   mainWindow.webContents.send("login-result", data);
 });
 
