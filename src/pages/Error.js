@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
@@ -7,6 +7,13 @@ import { COLOR } from "../config/constants";
 export default function Error() {
   const navigate = useNavigate();
   const location = useLocation();
+  const ipcRenderer = window.electron.ipcRenderer;
+
+  useEffect(() => {
+    if (location.state?.errorStatus === 401) {
+      ipcRenderer.send("removeAllCookies");
+    }
+  }, []);
 
   return (
     <Container>
