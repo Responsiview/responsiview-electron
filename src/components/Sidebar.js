@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import styled from "styled-components";
 import { GoDeviceMobile } from "react-icons/go";
 import { AiOutlineUnorderedList } from "react-icons/ai";
@@ -24,6 +23,7 @@ export default function Sidebar() {
   const [isDevicesMenuOpen, setIsDevicesMenuOpen] = useState(false);
   const [isPresetMenuOpen, setIsPresetMenuOpen] = useState(false);
   const [isFCPModalOpen, setIsFCPModalOpen] = useState(false);
+  const ipcRenderer = window.electron.ipcRenderer;
 
   function handleDevicesButtonClick() {
     setIsDevicesMenuOpen(!isDevicesMenuOpen);
@@ -44,23 +44,9 @@ export default function Sidebar() {
   }
 
   async function handleLogoutButtonClick() {
-    try {
-      await axios({
-        method: "post",
-        url: `${process.env.REACT_APP_BASE_SERVER_URL}/logout`,
-        withCredentials: true,
-      });
+    ipcRenderer.send("removeAllCookies");
 
-      dispatch(addToast("로그아웃 되었습니다."));
-    } catch (error) {
-      navigate("/error", {
-        state: {
-          errorStatus: error.response?.status,
-          errorMessage: error.response?.data.errorMessage,
-        },
-        replace: true,
-      });
-    }
+    dispatch(addToast("로그아웃 되었습니다."));
 
     dispatch(initUserSlice());
     dispatch(initDeviceSlice());
