@@ -1,6 +1,6 @@
 {
   "name": "responsiview-electron",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "author": "Gyutae Park",
   "private": true,
   "dependencies": {
@@ -17,27 +17,20 @@
     "react-router-dom": "^6.4.3",
     "react-scripts": "5.0.1",
     "recharts": "^2.1.16",
-    "styled-components": "^5.3.6"
+    "styled-components": "^5.3.6",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^14.4.3"
   },
   "main": "public/electron.js",
   "homepage": "./",
   "scripts": {
     "start": "concurrently \"react-scripts start\" \"npm run electron\" ",
-    "build": "react-scripts build",
+    "react-build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "electron": "wait-on http://localhost:3000 && electron .",
-    "electron-package": "npm run build && electron-builder"
-  },
-  "build": {
-    "protocols": [
-      {
-        "name": "Responsiview",
-        "schemes": [
-          "responsiview"
-        ]
-      }
-    ]
+    "electron-build": "npm run react-build && electron-builder"
   },
   "eslintConfig": {
     "extends": [
@@ -58,9 +51,6 @@
     ]
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^14.4.3",
     "concurrently": "^7.5.0",
     "electron": "^21.2.2",
     "electron-builder": "^24.0.0-alpha.3",
