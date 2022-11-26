@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
 import axios from "axios";
+import styled from "styled-components";
 
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";

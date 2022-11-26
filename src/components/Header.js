@@ -16,8 +16,9 @@ import correctUrl from "../utils/correctUrl";
 import { COLOR } from "../config/constants";
 
 export default function Header() {
-  const dispatch = useDispatch();
   const [localUrl, setLocalUrl] = useState();
+  const dispatch = useDispatch();
+
   const selectCommonUrl = useSelector((state) => state.device.commonUrl);
   const selectCanGoBack = useSelector((state) => state.device.canGoBack);
   const selectCanGoForward = useSelector((state) => state.device.canGoForward);

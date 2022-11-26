@@ -9,10 +9,11 @@ import { COLOR } from "../config/constants";
 import { deviceData } from "../utils/deviceData";
 
 export default function DevicesMenu() {
+  const dispatch = useDispatch();
+
   const selectAvailableDeviceIds = useSelector(
     (state) => state.device.availableDeviceIds,
   );
-  const dispatch = useDispatch();
 
   return (
     <>

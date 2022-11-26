@@ -14,6 +14,5 @@ export const COLOR = {
 };
 
 export const NUMBER = {
-  BASE: 1.2,
   DEBOUNCE_DELAY: 200,
 };

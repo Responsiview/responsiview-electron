@@ -77,6 +77,7 @@ export default function PerformanceCheck({ closeModal }) {
     </Container>
   );
 }
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;

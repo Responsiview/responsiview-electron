@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import styled from "styled-components";
-import PropTypes from "prop-types";
 import axios from "axios";
 import { debounce } from "lodash";
+import styled from "styled-components";
+import PropTypes from "prop-types";
 
 import { addPreset } from "../features/device/deviceSlice";
 import { addToast } from "../features/toast/toastSlice";
@@ -53,7 +53,6 @@ export default function PresetRegister({ closeModal }) {
 
     try {
       const token = await ipcRenderer.invoke("getCookie", "token");
-
       const response = await axios({
         method: "post",
         url: `${process.env.REACT_APP_BASE_SERVER_URL}/user/${selectUserInfo.userEmail}/preset`,

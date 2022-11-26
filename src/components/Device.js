@@ -16,11 +16,12 @@ import { addToast } from "../features/toast/toastSlice";
 import { COLOR } from "../config/constants";
 
 export default function Device({ id, name, width, height, useragent }) {
+  const dispatch = useDispatch();
   const webviewRef = useRef();
   const commonUrlRef = useRef();
   const deviceScaleRef = useRef();
   const [didMount, setDidMount] = useState(false);
-  const dispatch = useDispatch();
+
   const selectDeviceScale = useSelector((state) => state.device.deviceScale);
   const selectCommonUrl = useSelector((state) => state.device.commonUrl);
   const selectNavigationOffset = useSelector(
@@ -72,6 +73,7 @@ export default function Device({ id, name, width, height, useragent }) {
 
   useEffect(() => {
     setDidMount(true);
+
     webviewRef.current.addEventListener("dom-ready", handleWebviewDomReady);
     webviewRef.current.addEventListener(
       "will-navigate",
@@ -121,18 +123,6 @@ export default function Device({ id, name, width, height, useragent }) {
 
 const DeviceContainer = styled.div`
   margin: 1rem;
-`;
-
-const WebviewContainer = styled.div`
-  border: 1px solid black;
-  width: ${(props) => props.scaledWidth};
-  height: ${(props) => props.scaledHeight};
-
-  .webview {
-    width: 100%;
-    height: 100%;
-    background-color: white;
-  }
 `;
 
 const DeviceHeader = styled.div`
@@ -186,6 +176,18 @@ const DeleteButton = styled.button`
   &:hover {
     background-color: ${COLOR.IVORY};
     color: ${COLOR.RED};
+  }
+`;
+
+const WebviewContainer = styled.div`
+  border: 1px solid black;
+  width: ${(props) => props.scaledWidth};
+  height: ${(props) => props.scaledHeight};
+
+  .webview {
+    width: 100%;
+    height: 100%;
+    background-color: white;
   }
 `;
 

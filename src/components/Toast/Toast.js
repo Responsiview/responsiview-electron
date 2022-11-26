@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
 
 import { removeToastById } from "../../features/toast/toastSlice";
 

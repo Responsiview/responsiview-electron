@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import styled from "styled-components";
 import axios from "axios";
+import styled from "styled-components";
 import { FcGoogle } from "react-icons/fc";
 
 import { setUserInfo } from "../features/user/userSlice";
@@ -22,7 +22,7 @@ export default function Login() {
   }
 
   useEffect(() => {
-    ipcRenderer.once("login-result", async (event, data) => {
+    ipcRenderer.once("login-result", async (_, data) => {
       const loginResult = convertLoginData(data);
 
       if (loginResult.result === "success") {
