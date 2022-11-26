@@ -1,15 +1,10 @@
-const {
-  app,
-  BrowserWindow,
-  ipcMain,
-  nativeImage,
-  session,
-} = require("electron");
+const { app, BrowserWindow } = require("electron");
 
 const path = require("path");
 const isDev = require("electron-is-dev");
 
-const measureFCPTime = require("./handlers/measureFCPTime");
+const setListener = require("./mainProcess/init/setListener");
+const setMenu = require("./mainProcess/init/setMenu");
 
 let mainWindow;
 
@@ -20,42 +15,15 @@ function createWindow() {
     minWidth: 1000,
     minHeight: 750,
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
+      preload: path.join(__dirname, "mainProcess", "preloads", "/preload.js"),
       nodeIntegration: true,
       webviewTag: true,
       enableRemoteModule: true,
     },
   });
 
-  ipcMain.handle(
-    "measureFCPTime",
-    async (_, deviceInfo) => await measureFCPTime(deviceInfo),
-  );
-
-  ipcMain.handle("getCookie", async (_, cookieKey) => {
-    const cookie = await session.defaultSession.cookies.get({
-      name: cookieKey,
-    });
-
-    return cookie[0].value;
-  });
-  ipcMain.on("setCookie", async (_, cookie) => {
-    await session.defaultSession.cookies.set({
-      url: "https://responsiview-firebase-login.netlify.app",
-      name: cookie.key,
-      value: cookie.value,
-    });
-  });
-  ipcMain.on("removeAllCookies", async () => {
-    const cookies = await session.defaultSession.cookies.get({});
-
-    cookies.forEach((cookie) =>
-      session.defaultSession.cookies.remove({
-        url: "https://responsiview-firebase-login.netlify.app",
-        name: cookie.name,
-      }),
-    );
-  });
+  setListener();
+  setMenu();
 
   mainWindow.loadURL(
     isDev
@@ -67,11 +35,7 @@ function createWindow() {
     mainWindow.webContents.openDevTools();
   }
 
-  const image = nativeImage.createFromPath(
-    path.join(__dirname, "../src/assets/images/responsiview-logo.png"),
-  );
-
-  app.dock.setIcon(image);
+  app.on("ready", createWindow);
 }
 
 app.whenReady().then(() => {
@@ -80,14 +44,14 @@ app.whenReady().then(() => {
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
+
+  app.on("open-url", (_, data) => {
+    mainWindow.webContents.send("login-result", data);
+  });
 });
 
 app.setAsDefaultProtocolClient("responsiview");
 
-app.on("open-url", (_, data) => {
-  mainWindow.webContents.send("login-result", data);
-});
-
 app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") app.quit();
+  app.quit();
 });

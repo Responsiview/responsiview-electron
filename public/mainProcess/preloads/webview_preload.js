@@ -2,7 +2,7 @@ const channel = new BroadcastChannel("webviewChannel");
 
 let prevRatio = 0;
 
-function handleScrollEvent(event) {
+function handleScrollEvent() {
   let scrollTop = Math.round(window.scrollY);
   let scrollHeight = Math.round(document.body.scrollHeight);
   let clientHeight = Math.round(window.innerHeight);

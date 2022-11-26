@@ -112,7 +112,7 @@ export default function Device({ id, name, width, height, useragent }) {
           src={selectNavigationHistory[selectNavigationOffset]}
           useragent={useragent}
           ref={webviewRef}
-          preload={`file://${window.path.dirname()}/webview_preload.js`}
+          preload={`file://${window.path.dirname()}/mainProcess/preloads/webview_preload.js`}
         />
       </WebviewContainer>
     </DeviceContainer>
