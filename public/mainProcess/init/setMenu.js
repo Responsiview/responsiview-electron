@@ -25,6 +25,27 @@ function setMenu() {
         },
       ],
     },
+    {
+      label: "Shortcut",
+      submenu: [
+        {
+          role: "selectAll",
+          accelerator: "Cmd+A",
+        },
+        {
+          role: "copy",
+          accelerator: "Cmd+C",
+        },
+        {
+          role: "cut",
+          accelerator: "Cmd+X",
+        },
+        {
+          role: "paste",
+          accelerator: "Cmd+V",
+        },
+      ],
+    },
   ];
 
   const menu = Menu.buildFromTemplate(menuTemplate);
