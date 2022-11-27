@@ -19,9 +19,8 @@
 ## 목차
 
 - [시연 영상 및 기능 목록](https://github.com/Responsiview/responsiview-electron/edit/dev/README.md#%EC%8B%9C%EC%97%B0-%EC%98%81%EC%83%81-%EB%B0%8F-%EA%B8%B0%EB%8A%A5-%EB%AA%A9%EB%A1%9D)
-- [도전 과제](https://github.com/Responsiview/responsiview-electron/edit/dev/README.md#%EB%8F%84%EC%A0%84-%EA%B3%BC%EC%A0%9C)
-- [이슈 내역](https://github.com/Responsiview/responsiview-electron/edit/dev/README.md#%EC%9D%B4%EC%8A%88-%EB%82%B4%EC%97%AD)
-- [배운 점](https://github.com/Responsiview/responsiview-electron/edit/dev/README.md#%EB%B0%B0%EC%9A%B4-%EC%A0%90)
+- [Challenges](https://github.com/Responsiview/responsiview-electron/edit/dev/README.md#challenges)
+- [Issues](https://github.com/Responsiview/responsiview-electron/edit/dev/README.md#issues)
 - [기술 스택](https://github.com/Responsiview/responsiview-electron/edit/dev/README.md#%EA%B8%B0%EC%88%A0-%EC%8A%A4%ED%83%9D)
 - [프로젝트 기간](https://github.com/Responsiview/responsiview-electron/edit/dev/README.md#%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EA%B8%B0%EA%B0%84)
 - [설치 방법](https://github.com/Responsiview/responsiview-electron/edit/dev/README.md#%EC%84%A4%EC%B9%98-%EB%B0%A9%EB%B2%95)
@@ -42,7 +41,7 @@ https://user-images.githubusercontent.com/33389245/204161089-8f159e34-f1d4-4fdb-
 <br/>
 <br/>
 
-## 도전 과제
+## Challenges
 
 ### 어떻게 여러 웹페이지를 표시하며, 기기에 맞는 화면을 표현할 것인가?
 
@@ -61,7 +60,7 @@ https://user-images.githubusercontent.com/33389245/204161089-8f159e34-f1d4-4fdb-
   해당 API를 사용하면 IPC 통신과 같은 복잡한 단계를 거치지 않아도, 동일한 URL에 접속한 webview간 특정 채널을 통해 통신이 가능하기 때문에, 단순화된 로직으로 기능 구현이 가능했습니다.
   <br/><br/>
 
-## 이슈 내역
+## Issues
 
 ### 빌드된 App에서 firebase 로그인 불가이슈
 
@@ -74,8 +73,6 @@ https://user-images.githubusercontent.com/33389245/204161089-8f159e34-f1d4-4fdb-
 
 - 처음 시도한 방식은, 기기별 `First-Contentful-Paint(*줄여서 FCP) time`을 측정하기 위해 Renderer Process에서 Main Process로 정보를 전달한 뒤, `puppeteer`을 사용해 background에서 async/await 방식으로 `순차적으로` 기기별 시간 측정을 했었습니다. 하지만, 해당 방식의 문제점은 항상 처음 측정된 기기의 FCP Time이 가장 높게 나오는 문제였었습니다. <br/>
 저는 문제를 해결하기 위해, 모든 기기정보를 순회하며, page의 시간을 측정하는 Promise 배열을 생성하고, `Promise.all`을 사용해 동시다발적으로 FCP Time 측정이 되게 했고, 문제를 해결 할 수 있었습니다.
-<details>
-<summary>참고 코드</summary>
 
 ```js
   const Promises = deviceInfo.devices.map(async (device) => {
@@ -96,28 +93,15 @@ https://user-images.githubusercontent.com/33389245/204161089-8f159e34-f1d4-4fdb-
 
       return timeObject;
     });
-
-    FCPResult.deviceName = device.name;
-
+    
     return FCPResult;
   });
 
   const FCPResults = await Promise.all(Promises);
 ```
 
-</details>
-
 <br/>
 <br/>
-
-## 배운 점
-
-### 웹사이트 성능 Metric
-
-- 
-
-  <br/>
-  <br/>
 
 ## 기술 스택
 
