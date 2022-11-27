@@ -73,8 +73,9 @@ https://user-images.githubusercontent.com/33389245/204161089-8f159e34-f1d4-4fdb-
 
 - 처음 시도한 방식은, 기기별 `First-Contentful-Paint(*줄여서 FCP) time`을 측정하기 위해 Renderer Process에서 Main Process로 정보를 전달한 뒤, `puppeteer`을 사용해 background에서 async/await 방식으로 `순차적으로` 기기별 시간 측정을 했었습니다. 하지만, 해당 방식의 문제점은 항상 처음 측정된 기기의 FCP Time이 가장 높게 나오는 문제였었습니다. <br/>
 저는 문제를 해결하기 위해, 모든 기기정보를 순회하며, page의 시간을 측정하는 Promise 배열을 생성하고, `Promise.all`을 사용해 동시다발적으로 FCP Time 측정이 되게 했고, 문제를 해결 할 수 있었습니다.
+- 참고 코드
 
-```js
+  ```js
   const Promises = deviceInfo.devices.map(async (device) => {
     const page = await browser.newPage();
 
@@ -98,7 +99,7 @@ https://user-images.githubusercontent.com/33389245/204161089-8f159e34-f1d4-4fdb-
   });
 
   const FCPResults = await Promise.all(Promises);
-```
+  ```
 
 <br/>
 <br/>
