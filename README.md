@@ -18,12 +18,12 @@
 
 ## 목차
 
-- [시연 영상 및 기능 목록](https://github.com/Responsiview/responsiview-electron/edit/dev/README.md#%EC%8B%9C%EC%97%B0-%EC%98%81%EC%83%81-%EB%B0%8F-%EA%B8%B0%EB%8A%A5-%EB%AA%A9%EB%A1%9D)
-- [Challenges](https://github.com/Responsiview/responsiview-electron/edit/dev/README.md#challenges)
-- [Issues](https://github.com/Responsiview/responsiview-electron/edit/dev/README.md#issues)
-- [기술 스택](https://github.com/Responsiview/responsiview-electron/edit/dev/README.md#%EA%B8%B0%EC%88%A0-%EC%8A%A4%ED%83%9D)
-- [프로젝트 기간](https://github.com/Responsiview/responsiview-electron/edit/dev/README.md#%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EA%B8%B0%EA%B0%84)
-- [설치 방법](https://github.com/Responsiview/responsiview-electron/edit/dev/README.md#%EC%84%A4%EC%B9%98-%EB%B0%A9%EB%B2%95)
+- [시연 영상 및 기능 목록](https://github.com/Responsiview/responsiview-electron#%EC%8B%9C%EC%97%B0-%EC%98%81%EC%83%81-%EB%B0%8F-%EA%B8%B0%EB%8A%A5-%EB%AA%A9%EB%A1%9D)
+- [Challenges](https://github.com/Responsiview/responsiview-electron#challenges)
+- [Issues](https://github.com/Responsiview/responsiview-electron#issues)
+- [기술 스택](https://github.com/Responsiview/responsiview-electron#%EA%B8%B0%EC%88%A0-%EC%8A%A4%ED%83%9D)
+- [프로젝트 기간](https://github.com/Responsiview/responsiview-electron#%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EA%B8%B0%EA%B0%84)
+- [설치 방법](https://github.com/Responsiview/responsiview-electron#%EC%84%A4%EC%B9%98-%EB%B0%A9%EB%B2%95)
 
 <br/>
 <br/>
