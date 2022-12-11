@@ -114,9 +114,13 @@ https://user-images.githubusercontent.com/33389245/204161089-8f159e34-f1d4-4fdb-
 
 `Node.js`, `Express`
 
+### Database
+
+`MongoDB`, `Mongoose`
+
 ### Deployment
 
-`Netlify`, `electron-builder`, `AWS EB`
+`Netlify`, `AWS EB`, `electron-builder`, 
 
 <br/>
 <br/>
