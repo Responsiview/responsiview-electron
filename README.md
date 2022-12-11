@@ -35,7 +35,7 @@ https://user-images.githubusercontent.com/33389245/204161089-8f159e34-f1d4-4fdb-
 - 스크롤 동기화
 - URL 동기화
 - 커스텀 Preset 관리
-- First-Contetnful-Time 측정
+- First-Contetnful-Paint Time 측정
 - Zoom in/out
 
 <br/>
