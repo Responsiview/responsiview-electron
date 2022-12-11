@@ -120,7 +120,7 @@ https://user-images.githubusercontent.com/33389245/204161089-8f159e34-f1d4-4fdb-
 
 ### Deployment
 
-`Netlify`, `AWS EB`, `electron-builder`, 
+`Netlify`, `AWS EB`, `electron-builder`
 
 <br/>
 <br/>
